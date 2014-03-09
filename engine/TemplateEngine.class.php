@@ -129,7 +129,7 @@ class TemplateEngine
 								        };
 
 								       $.ajax({
-								            url: "'.BASE_URL.'/data/ajaxengine",
+								            url: "'.BASE_URL.'data/ajaxengine",
 								            type: "POST",
 								            data: widget_data,
 								            dataType: "json",

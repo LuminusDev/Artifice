@@ -2,7 +2,7 @@
 	
 	/* Configuration TemplateEngine */
 	define( "SITE_NAME", 'Artifice');
-	define( "BASE_URL", 'http://dev.luminus.loc');
+	define( "BASE_URL", 'http://dev.luminus.loc/'); //must finish by a '/'
 	define( "BASE_FOLDER", '/'); //folder where artifice is placed on the server, if not on the root. Example : "/myartifice"
 
 	define( "WEBROOT", $_SERVER['DOCUMENT_ROOT']);

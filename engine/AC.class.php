@@ -44,4 +44,23 @@ class AC
 		}
 		return isset(self::$pimple[$key]) ? self::$pimple[$key] : null;
 	}
+
+	public static function loadModel($name)
+	{
+		$model = self::get($name."_models");
+		if (empty($model)) {
+			$res_explode = explode('/',$name);
+			$classname = array_pop($res_explode)."Model";
+			self::set($name."_models",
+				function ($c) use ($classname) {
+					return new $classname;
+				},
+				function () use ($name) {
+					require_once MODELPATH.$name.'.php';
+				}
+			);
+			$model = self::get($name."_models");
+		}
+		return $model;
+	}
 }

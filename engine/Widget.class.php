@@ -237,30 +237,4 @@ abstract class Widget
 		$content = '<div class="widgetAjax_'.preg_replace('#/#','-',$this->_name).'"></div>';
 		return $content;
 	}
-
-	/**
-	* loadModel
-	*
-	* Charge un modèle depuis le containeur et le retourne
-	* @return Model
-	**/
-	public function loadModel($name)
-	{
-		$model = AC::get($name."_models");
-		if (empty($model)) {
-			$res_explode = explode('/',$name);
-			$classname = array_pop($res_explode)."Model";
-			AC::set($name."_models",
-				function ($c) use ($classname) {
-					return new $classname;
-				},
-				function () use ($name) {
-					require_once MODELPATH.$name.'.php';
-				}
-			);
-			$model = AC::get($name."_models");
-		}
-
-		return $model;
-	}
 }

@@ -236,7 +236,7 @@
 		public function redirect301($url)
 		{
 			header('HTTP/1.1 301 Moved Permanently', false, 301);
-			header('Location: '.BASE_URL.'/'.$url.$_SERVER['QUERY_STRING'].'');
+			header('Location: '.BASE_URL.$url.$_SERVER['QUERY_STRING'].'');
 			exit();
 		}
 
@@ -276,13 +276,13 @@
 								},
 								$this->remove_slash($array_path['url'])
 							);
-					return ($exist) ? BASE_URL.'/'.$url : BASE_URL;
+					return ($exist) ? BASE_URL.$url : BASE_URL;
 				}
 			}
 			// Default url else
 
 			$url = $this->remove_slash($pathToCheck.'/'.implode('/',$params));
-			return BASE_URL.'/'.$url;
+			return BASE_URL.$url;
 		}
 
 		public function remove_slash($path)

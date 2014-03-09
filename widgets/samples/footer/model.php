@@ -11,6 +11,6 @@ class Footer extends Widget
 
 	public function run()
 	{
-		$this->data['dbtest'] = $this->loadModel('sample')->getToto();
+		$this->data['dbtest'] = AC::loadModel('sample')->getToto();
 	}
 }
