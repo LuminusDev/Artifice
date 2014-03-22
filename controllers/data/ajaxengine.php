@@ -59,7 +59,7 @@
 
 				$return['item'] = preg_replace('#/#','-',$name);
 				$return['validate'] = true;
-				$return['data'] = $result;
+				$return['data'] = utf8_encode($result);
 			} else {
 				$return['validate'] = false;
 			}
