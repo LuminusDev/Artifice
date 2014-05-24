@@ -122,6 +122,15 @@ abstract class Widget
 	}
 
 	/**
+	 * setVar
+	 * Defini le nom de la variable qui doit contenir le contenu du widget
+	 **/
+	public function setVar($var)
+	{
+		$this->_var = $var;
+	}
+
+	/**
 	 * getWidget
 	 * Retourne le tableau des widgets inclus sous la forme :
 	 * name => cacheDuration => 3600
@@ -152,7 +161,8 @@ abstract class Widget
 				if ($this->_cacheDuration > $v->getCacheDuration() && $v->getCacheDuration() > 60) {
 					$v->setIsAjax(true);
 				}
-				$this->_widget[$v->getVar()]=$v;
+				$v->setVar($k);
+				$this->_widget[$k]=$v;
 				if ($this->_isAjax) {
 					$_SESSION['widgetsAjax'][$this->_name]['widget'] = $this->getWidget();
 				}

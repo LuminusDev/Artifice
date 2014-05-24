@@ -13,7 +13,6 @@
 **/
 	class Router
 	{
-
 		private $proper_url;
 		private $controller;
 		private $function;
@@ -180,8 +179,12 @@
 
 		private function checkPriorityBasicRoute()
 		{
-			// verification validite du chemin par rapport aux routes personnalisees
 			$this->current_repertory = substr($this->current_repertory, strlen(CONTROLLERPATH), -1); // suppression du dossier des controleurs et du dernier slash
+			// verification validite du chemin par rapport aux routes par defaut
+			if ($this->remove_slash($this->routes_default['base']) === $this->current_repertory) {
+				$this->error404();
+			}
+			// verification validite du chemin par rapport aux routes personnalisees
 			foreach ($this->routes_direct as $path => $array_path) {
 				if ($this->remove_slash($path) === $this->current_repertory) {
 					if (isset($array_path['main'])) {

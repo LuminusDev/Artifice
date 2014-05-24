@@ -50,7 +50,7 @@ class TemplateEngine
 	**/
 	public function createWidget($name, $variable = null, $assign = array())
 	{
-		require WIDGETPATH.$name.'/model.php';
+		require_once WIDGETPATH.$name.'/model.php';
 		$res_explode = explode('/', $name);
 		$className = array_pop($res_explode);
 		$tmpWidget = new $className($variable);
@@ -59,7 +59,9 @@ class TemplateEngine
 			$tmpWidget->assign($assign);
 		}
 
-		$this->_widget[$tmpWidget->getVar()]= $tmpWidget;
+		if (!empty($variable)) {
+			$this->_widget[$tmpWidget->getVar()]= $tmpWidget;
+		}
 
 		return $tmpWidget;
 	}
