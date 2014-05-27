@@ -1,4 +1,3 @@
-
 <?php
 	
 /**
@@ -20,7 +19,7 @@
 		public function index()
 		{
 			$widget_exist = function ($name) {
-				return isset($_SESSION[SESSAJAX]) && array_key_exists($name, $_SESSION[SESSAJAX]) && file_exists(WIDGETPATH.htmlentities($name));
+				return isset($_SESSION[SESSAJAX]) && array_key_exists($name, $_SESSION[SESSAJAX]) && file_exists(WIDGETPATH.$name);
 			};
 
 			$create_multi_widget = function ($name, $arrayWidget) use (&$create_multi_widget) {
@@ -40,15 +39,16 @@
 			$name = isset($_POST['widgetName']) ? htmlentities($_POST['widgetName']) : null;
 			$token = isset($_POST['token']) ? htmlentities($_POST['token']) : null;
 			if (!empty($name) && $widget_exist($name) && checkToken($token,$_SESSION[SESSAJAXTOKEN])) {
-
+				$content_widget = $_SESSION[SESSAJAX][$name]['content'];
+				$widget_widget = $_SESSION[SESSAJAX][$name]['widget'];
 				$tmpw = $this->createWidget($name);
 
 				// On récupère les paramètres
-				foreach ($_SESSION[SESSAJAX][$name]['content'] as $key => $value) {
+				foreach ($content_widget as $key => $value) {
 					$tmpW->assign(array($key => $value));
 				}
 
-				foreach ($_SESSION[SESSAJAX][$name]['widget'] as $k => $v) {
+				foreach ($widget_widget as $k => $v) {
 					$createWidget = $create_multi_widget($k,$v);
 					$tmpW->assign(array($k => $createWidget));
 				}

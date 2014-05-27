@@ -70,9 +70,9 @@ abstract class Widget
 		$this->_isAjax = $isAjax;
 		if ($this->_isAjax) {
 			// widget en session pour le retrouver avec ajaxEngine
-			$_SESSION['widgetsAjax'][$this->_name]['cacheDuration'] = $this->_cacheDuration;
-			$_SESSION['widgetsAjax'][$this->_name]['content'] = $this->_content;
-			$_SESSION['widgetsAjax'][$this->_name]['widget'] = $this->getWidget();
+			$_SESSION[SESSAJAX][$this->_name]['cacheDuration'] = $this->_cacheDuration;
+			$_SESSION[SESSAJAX][$this->_name]['content'] = $this->_content;
+			$_SESSION[SESSAJAX][$this->_name]['widget'] = $this->getWidget();
 		}
 	}
 
@@ -164,7 +164,7 @@ abstract class Widget
 				$v->setVar($k);
 				$this->_widget[$k]=$v;
 				if ($this->_isAjax) {
-					$_SESSION['widgetsAjax'][$this->_name]['widget'] = $this->getWidget();
+					$_SESSION[SESSAJAX][$this->_name]['widget'] = $this->getWidget();
 				}
 			}
 			else {
@@ -173,7 +173,7 @@ abstract class Widget
 					$this->_cache->params($k, $v);
 				}
 				if ($this->_isAjax) {
-					$_SESSION['widgetsAjax'][$this->_name]['content'] = $this->_content;
+					$_SESSION[SESSAJAX][$this->_name]['content'] = $this->_content;
 				}
 			}
 		}
