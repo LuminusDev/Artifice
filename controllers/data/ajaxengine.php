@@ -7,7 +7,7 @@
  * Cette classe fait partie integrante du framework Artifice
  *
  * @author Kévin Barreau <kevin.barreau.info@gmail.com>
- * LR 15/02/2014
+ * LR 28/05/2014
  **/
 	class Ajaxengine extends TemplateEngine
 	{
@@ -38,24 +38,22 @@
 
 			$name = isset($_POST['widgetName']) ? htmlentities($_POST['widgetName']) : null;
 			$token = isset($_POST['token']) ? htmlentities($_POST['token']) : null;
-			if (!empty($name) && $widget_exist($name) && checkToken($token,$_SESSION[SESSAJAXTOKEN])) {
+			if (!empty($name) && $widget_exist($name) && AC::get('token')->check($token)) {
 				$content_widget = $_SESSION[SESSAJAX][$name]['content'];
 				$widget_widget = $_SESSION[SESSAJAX][$name]['widget'];
 				$tmpw = $this->createWidget($name);
 
 				// On récupère les paramètres
 				foreach ($content_widget as $key => $value) {
-					$tmpW->assign(array($key => $value));
+					$tmpw->assign(array($key => $value));
 				}
 
 				foreach ($widget_widget as $k => $v) {
 					$createWidget = $create_multi_widget($k,$v);
-					$tmpW->assign(array($k => $createWidget));
+					$tmpw->assign(array($k => $createWidget));
 				}
 
 				$result = $tmpw->getContentForHTTP();
-				$result = templateEngine_translate($result);
-				$result = templateEngine_minification($result);
 
 				$return['item'] = preg_replace('#/#','-',$name);
 				$return['validate'] = true;
@@ -64,21 +62,8 @@
 				$return['validate'] = false;
 			}
 
-			if (isset($_POST['allWidgets'])) {
-				$arrayAllWidgets = $_POST['allWidgets'];
-				array_shift($arrayAllWidgets);
-				if (!empty($arrayAllWidgets)) {
-					$return['widgets'] = $arrayAllWidgets;
-				} else {
-					$return['widgets'] = false;
-				}
-			} else {
-				$return['widgets'] = false;
-			}
-
 			unset($_SESSION[SESSAJAX][$name]);
 			if (empty($_SESSION[SESSAJAX])) {
-				unset($_SESSION[SESSAJAXTOKEN]);
 				unset($_SESSION[SESSAJAX]);
 			}
 			echo json_encode($return);

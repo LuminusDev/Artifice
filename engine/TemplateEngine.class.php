@@ -9,10 +9,9 @@ date_default_timezone_set('Europe/Paris');
  *
  * @author: Guillaume Marques <guillaume.marques33@gmail.com>
  * @author: Kévin Barreau <kevin.barreau.info@gmail.com>
- * LR 15/02/14
+ * LR 28/05/14
 **/
 
-require_once __DIR__.'/../inc/fct.inc.php';
 require_once 'Widget.class.php';
 require_once 'EngineException.class.php';
 
@@ -33,6 +32,10 @@ class TemplateEngine
 	{
 		// indispensable pour cleaner ajax
 		unset($_SESSION[SESSAJAX]);
+		unset($_SESSION[SESSAJAXTOKEN]);
+
+		// creation token CSRF
+		AC::get('token')->create();
 	}
 
 	/**
@@ -55,9 +58,7 @@ class TemplateEngine
 		$className = array_pop($res_explode);
 		$tmpWidget = new $className($variable);
 
-		foreach ($assign as $key => $value) {
-			$tmpWidget->assign($assign);
-		}
+		$tmpWidget->assign($assign);
 
 		if (!empty($variable)) {
 			$this->_widget[$tmpWidget->getVar()]= $tmpWidget;
@@ -113,10 +114,6 @@ class TemplateEngine
 		//On ajoute le script si besoin pour afficher les widgets en ajax
 		$arrayWidgetAjax = null;
 		if (isset($_SESSION[SESSAJAX])) {
-			// token acces ajax
-			$tokenAjax = randomName(20);
-			$_SESSION[SESSAJAXTOKEN] = createToken($tokenAjax);
-
 			$arrayWidgetAjax = '<script type="text/javascript"> var widgetsAjax = ';
 			foreach ($_SESSION[SESSAJAX] as $key => $value) {
 				$nameWidgetsAjax[] = $key;
@@ -125,37 +122,34 @@ class TemplateEngine
 			$arrayWidgetAjax .= '
 									function loopAjaxWidget(widgets) {
 								        var widget_data = {
-								        	token: "'.$tokenAjax.'",
+								        	token: "'.AC::get('token')->get().'",
 								            widgetName: widgets[0],
 								            allWidgets: widgets
 								        };
 
 								       $.ajax({
-								            url: "'.BASE_URL.'data/ajaxengine",
+								            url: "'.AC::get('router')->url("data/ajaxengine").'",
 								            type: "POST",
 								            data: widget_data,
 								            dataType: "json",
 								            success: function(msg)
 								            {
-								            	
 									                if(msg.validate)
 									                {
 														$(".widgetAjax_"+msg.item).before(msg.data).remove();
 									                }
-									                if(msg.widgets)
-									                {
-									                	loopAjaxWidget(msg.widgets);
-									                }
-									        	
 								            },
 								            error: function(msg){}
 								        });
+										widgets.shift();
+										if (widgets.length > 0) {
+											loopAjaxWidget(widgets);
+										}
 								        return false;
 									};
 									$(document).ready(function(){loopAjaxWidget(widgetsAjax);});
 							    </script>';
 		}
-
 		echo $arrayWidgetAjax;
 	}
 }

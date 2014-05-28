@@ -1,8 +1,12 @@
-
 <?php
 
 	class Error404 extends TemplateEngine
 	{
+		public function __construct()
+		{
+			// not parent, so not unset($_SESSION[SESSAJAX]);
+		}
+
 		public function index()
 		{
 			header("HTTP/1.0 404 Not Found", true, 404);

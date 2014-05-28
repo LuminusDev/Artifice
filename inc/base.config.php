@@ -17,7 +17,7 @@
 
 	/* Configuration EngineException */
 	define( 'DIVSTYLE' , 'background: #ffbcc1; width: 800px; margin: 100px auto 100px auto; border-radius: 5px; padding: 30px; border: 1px solid #c6000d;');
-	define( 'MAILPOSTMASTER', 'postmaster@yt-stats.com');
+	define( 'MAILPOSTMASTER', 'postmaster@artifice.com');
 
 	/* Configuration Widget */
 	define("WIDGETPATH", __DIR__.'/../widgets/'); //must finish by a '/'
@@ -27,6 +27,7 @@
 	/* Configuration AjaxEngine */
 	define( "SESSAJAX",'widgetsAjax');
 	define( "SESSAJAXTOKEN", 'widgetsAjaxToken');
+	define( "SESSAJAXTOKENSALT", 'INSERT_RANDOM_STRING_HERE');
 
 	/* Configuration Base de données */
 	define( "DBHOST", 'localhost');

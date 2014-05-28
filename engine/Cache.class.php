@@ -7,7 +7,7 @@
  *
  * @author Guillaume Marques <guillaume.marques33@gmail.com>
  * @author Kévin Barreau <kevin.barreau.info@gmail.com>
- * LR 15/02/2014
+ * LR 28/05/2014
 **/
 
 class Cache
@@ -44,7 +44,7 @@ class Cache
 	 **/
 	public function params($key, $value)
 	{
-		$this->_name .= '_'.addslashes($key).':'.addslashes($value);
+		$this->_name .= '_'.addslashes($key).'-'.addslashes($value);
 		$this->_path = CACHEPATH.$this->_name.CACHEEXT;
 	}
 
