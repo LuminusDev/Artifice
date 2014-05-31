@@ -13,13 +13,13 @@
 	{
 		public function __construct()
 		{
-			// not parent, so not unset($_SESSION[SESSAJAX]);
+			// not parent, so not Session::delete(SESSAJAX);
 		}
 
 		public function index()
 		{
 			$widget_exist = function ($name) {
-				return isset($_SESSION[SESSAJAX]) && array_key_exists($name, $_SESSION[SESSAJAX]) && file_exists(WIDGETPATH.$name);
+				return Session::get(SESSAJAX) && array_key_exists($name, Session::get(SESSAJAX)) && file_exists(WIDGETPATH.$name);
 			};
 
 			$create_multi_widget = function ($name, $arrayWidget) use (&$create_multi_widget) {
@@ -39,8 +39,9 @@
 			$name = isset($_POST['widgetName']) ? htmlentities($_POST['widgetName']) : null;
 			$token = isset($_POST['token']) ? htmlentities($_POST['token']) : null;
 			if (!empty($name) && $widget_exist($name) && AC::get('token')->check($token)) {
-				$content_widget = $_SESSION[SESSAJAX][$name]['content'];
-				$widget_widget = $_SESSION[SESSAJAX][$name]['widget'];
+
+				$content_widget = Session::get(SESSAJAX, $name, 'content');
+				$widget_widget = Session::get(SESSAJAX, $name, 'widget');
 				$tmpw = $this->createWidget($name);
 
 				// On récupère les paramètres
@@ -62,9 +63,22 @@
 				$return['validate'] = false;
 			}
 
-			unset($_SESSION[SESSAJAX][$name]);
-			if (empty($_SESSION[SESSAJAX])) {
-				unset($_SESSION[SESSAJAX]);
+			if (isset($_POST['allWidgets'])) {
+				$arrayAllWidgets = $_POST['allWidgets'];
+				array_shift($arrayAllWidgets);
+				if (!empty($arrayAllWidgets)) {
+					$return['widgets'] = $arrayAllWidgets;
+				} else {
+					$return['widgets'] = false;
+				}
+			} else {
+				$return['widgets'] = false;
+			}
+
+			Session::delete(SESSAJAX, $name);
+			$sess_ajax = Session::get(SESSAJAX);
+			if (empty($sess_ajax)) {
+				Session::delete(SESSAJAX);
 			}
 			echo json_encode($return);
 		}

@@ -1,4 +1,3 @@
-
 <?php
 
 date_default_timezone_set('Europe/Paris'); 
@@ -9,7 +8,7 @@ date_default_timezone_set('Europe/Paris');
  *
  * @author: Guillaume Marques <guillaume.marques33@gmail.com>
  * @author: Kévin Barreau <kevin.barreau.info@gmail.com>
- * LR 28/05/14
+ * LR 31/05/14
 **/
 
 require_once 'Widget.class.php';
@@ -30,9 +29,12 @@ class TemplateEngine
 	**/
 	function __construct()
 	{
+		// session bloquante
+		Session::setLock(true);
+
 		// indispensable pour cleaner ajax
-		unset($_SESSION[SESSAJAX]);
-		unset($_SESSION[SESSAJAXTOKEN]);
+		Session::delete(SESSAJAX);
+		Session::delete(SESSAJAXTOKEN);
 
 		// creation token CSRF
 		AC::get('token')->create();
@@ -113,9 +115,9 @@ class TemplateEngine
 	{
 		//On ajoute le script si besoin pour afficher les widgets en ajax
 		$arrayWidgetAjax = null;
-		if (isset($_SESSION[SESSAJAX])) {
+		if ($sess_ajax = Session::get(SESSAJAX)) {
 			$arrayWidgetAjax = '<script type="text/javascript"> var widgetsAjax = ';
-			foreach ($_SESSION[SESSAJAX] as $key => $value) {
+			foreach ($sess_ajax as $key => $value) {
 				$nameWidgetsAjax[] = $key;
 			}
 			$arrayWidgetAjax .= json_encode($nameWidgetsAjax).';';

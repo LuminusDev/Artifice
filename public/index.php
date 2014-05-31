@@ -1,7 +1,6 @@
 <?php
-  	session_start();
-
 	require __DIR__.'/../inc/base.config.php';
+  	require __DIR__.'/../engine/Session.class.php';
   	require __DIR__.'/../engine/AC.class.php';
 
   	require __DIR__.'/../inc/container.config.php';

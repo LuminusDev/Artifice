@@ -7,7 +7,7 @@
  *
  * @author Guillaume Marques <guillaume.marques33@gmail.com>
  * @author Kévin Barreau <kevin.barreau.info@gmail.com>
- * LR 02/15/2014
+ * LR 31/05/2014
  **/
 
 date_default_timezone_set('Europe/Paris');
@@ -70,9 +70,9 @@ abstract class Widget
 		$this->_isAjax = $isAjax;
 		if ($this->_isAjax) {
 			// widget en session pour le retrouver avec ajaxEngine
-			$_SESSION[SESSAJAX][$this->_name]['cacheDuration'] = $this->_cacheDuration;
-			$_SESSION[SESSAJAX][$this->_name]['content'] = $this->_content;
-			$_SESSION[SESSAJAX][$this->_name]['widget'] = $this->getWidget();
+			Session::set($this->_cacheDuration, SESSAJAX, $this->_name, 'cacheDuration');
+			Session::set($this->_content, SESSAJAX, $this->_name, 'content');
+			Session::set($this->getWidget(), SESSAJAX, $this->_name, 'widget');
 		}
 	}
 
@@ -164,7 +164,7 @@ abstract class Widget
 				$v->setVar($k);
 				$this->_widget[$k]=$v;
 				if ($this->_isAjax) {
-					$_SESSION[SESSAJAX][$this->_name]['widget'] = $this->getWidget();
+					Session::set($this->getWidget(), SESSAJAX, $this->_name, 'widget');
 				}
 			}
 			else {
@@ -173,7 +173,7 @@ abstract class Widget
 					$this->_cache->params($k, $v);
 				}
 				if ($this->_isAjax) {
-					$_SESSION[SESSAJAX][$this->_name]['content'] = $this->_content;
+					Session::set($this->_content, SESSAJAX, $this->_name, 'content');
 				}
 			}
 		}

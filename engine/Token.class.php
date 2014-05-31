@@ -5,7 +5,7 @@
  * Permet de gérer un token de sécurité dans Artifice
  *
  * @author Kévin Barreau <kevin.barreau.info@gmail.com>
- * LR 28/05/2014
+ * LR 31/05/2014
 **/
 
 class Token
@@ -20,7 +20,7 @@ class Token
 	public function create()
 	{
 		$this->string_token = $this->randomName(10);
-		$_SESSION[SESSAJAXTOKEN] = $this->tokenize($this->string_token);
+		Session::set($this->tokenize($this->string_token), SESSAJAXTOKEN);
 	}
 
 	public function get()
@@ -35,7 +35,7 @@ class Token
 
 	public function check($string)
 	{
-		return $this->tokenize($string) === $_SESSION[SESSAJAXTOKEN];
+		return $this->tokenize($string) === Session::get(SESSAJAXTOKEN);
 	}
 
 	public function randomName($taille)
