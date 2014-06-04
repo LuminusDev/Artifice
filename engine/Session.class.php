@@ -14,10 +14,16 @@
 class Session
 {
 	static private $lock = false;
+	static private $first = true;
 
 	public static function start()
 	{
-		if (session_id() === "" || !self::$lock) {
+		if (self::$first) {
+			session_start();
+			self::$first = false;
+		}
+		elseif (session_id() === "" || !self::$lock) {
+			header_remove('Set-Cookie');
 			session_start();
 		}
 	}
